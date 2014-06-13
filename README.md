@@ -1,4 +1,4 @@
-Hadoop ansible-playbooks
+Hadoop ansible role
 =========================
 
 Installs and configure Hadoop system in a cluster of nodes.
