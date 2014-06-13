@@ -1,0 +1,63 @@
+# RedHat related OSs
+- name: Yum install {{ item }}
+  action: yum pkg={{ item }} state=installed
+  when: redhat_os
+  with_items:
+  - wget
+  - tar
+  - gzip
+  - java-1.6.0-openjdk
+
+# Debian related OSs
+- name: Apt install {{ item }}
+  action: apt pkg={{ item }} state=installed update_cache=yes cache_valid_time=604800
+  when: debian_os
+  with_items:
+  - wget
+  - tar
+  - gzip
+  - openjdk-6-jre-headless
+
+- shell: wget -nd -r -l1 --no-parent {{ mirrors[IM_NODE_NUM|int % mirrors|length] }} -A 'hadoop-1.?.?.tar.gz' && mv hadoop-1.?.?.tar.gz hadoop-1.X.tar.gz creates=/tmp/hadoop-1.X.tar.gz chdir=/tmp
+
+- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? $hadoop_home creates={{ hadoop_home }} chdir=/opt
+
+- file: dest=/opt/hadoop src={{ hadoop_home }} state=link
+
+- lineinfile: dest="{{ hadoop_home }}/conf/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64"
+  when: debian_os
+
+- lineinfile: dest="{{ hadoop_home }}/conf/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-1.6.0"
+  when: redhat_os
+
+- template: src=mapred-site.xml dest="{{ hadoop_home }}/conf/mapred-site.xml" owner=root group=root
+  notify:
+   - restart hadoop-dfs
+   - restart hadoop-mapred
+   - restart hadoop-datanode
+   - restart hadoop-tasktracker
+
+- template: src=core-site.xml dest="{{ hadoop_home }}/conf/core-site.xml" owner=root group=root
+  notify:
+   - restart hadoop-dfs
+   - restart hadoop-mapred
+   - restart hadoop-datanode
+   - restart hadoop-tasktracker
+
+- template: src=masters dest="{{ hadoop_home }}/conf/masters" owner=root group=root
+  notify:
+   - restart hadoop-dfs
+   - restart hadoop-mapred
+   - restart hadoop-datanode
+   - restart hadoop-tasktracker
+
+- template: src=slaves dest="{{ hadoop_home }}/conf/slaves" owner=root group=root
+  notify:
+   - refreshDFSNodes
+   - refreshMRNodes
+   - restart hadoop-datanode
+   - restart hadoop-tasktracker
+
+- command: "{{ hadoop_home }}/bin/hadoop namenode -format creates=/tmp/hadoop-root/dfs/name"
+  when: "hadoop_type_of_node == 'master'"
+

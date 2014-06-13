@@ -1,0 +1,3 @@
+hadoop_type_of_node: slave
+hadoop_home: /opt/hadoop-1.X
+mirrors: [ "ftp://mirror.cc.columbia.edu/pub/software/apache/hadoop/core/stable1/", "ftp://apache.cs.utah.edu/apache.org/hadoop/core/stable1/","ftp://apache.mirrors.tds.net/pub/apache.org/hadoop/core/stable1/","ftp://ftp.osuosl.org/pub/apache/hadoop/core/stable1/" ]
