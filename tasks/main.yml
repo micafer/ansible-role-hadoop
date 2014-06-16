@@ -20,7 +20,7 @@
 
 - shell: wget -nd -r -l1 --no-parent {{ mirrors[IM_NODE_NUM|int % mirrors|length] }} -A 'hadoop-1.?.?.tar.gz' && mv hadoop-1.?.?.tar.gz hadoop-1.X.tar.gz creates=/tmp/hadoop-1.X.tar.gz chdir=/tmp
 
-- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? $hadoop_home creates={{ hadoop_home }} chdir=/opt
+- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? {{ hadoop_home }} creates={{ hadoop_home }} chdir=/opt
 
 - file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 
