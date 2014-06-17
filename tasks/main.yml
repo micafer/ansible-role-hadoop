@@ -61,3 +61,21 @@
 - command: "{{ hadoop_home }}/bin/hadoop namenode -format creates=/tmp/hadoop-root/dfs/name"
   when: "hadoop_type_of_node == 'master'"
 
+- name: Open port {{item}} - tcp in the firewall
+  command: iptables -I INPUT -p tcp --dport {{item}}:{{item}} -j ACCEPT
+  ignore_errors: yes
+  with_items:
+  - 50070
+  - 50030
+
+- name: Open all ports from ip {{ item.1 }} in the firewall
+  command: iptables -I INPUT -p tcp -s {{ item.1 }}  -j ACCEPT
+  ignore_errors: yes
+  with_together:
+      - groups.all
+      - ansible_all_ipv4_addresses
+
+- name: save iptables
+  shell: iptables-save > /etc/sysconfig/iptables
+  when: "ansible_os_family == 'RedHat'"
+
