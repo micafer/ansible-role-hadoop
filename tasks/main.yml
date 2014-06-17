@@ -1,7 +1,7 @@
 # RedHat related OSs
 - name: Yum install {{ item }}
   action: yum pkg={{ item }} state=installed
-  when: redhat_os
+  when: "ansible_os_family == 'RedHat'"
   with_items:
   - wget
   - tar
@@ -11,7 +11,7 @@
 # Debian related OSs
 - name: Apt install {{ item }}
   action: apt pkg={{ item }} state=installed update_cache=yes cache_valid_time=604800
-  when: debian_os
+  when: "ansible_os_family == 'Debian'"
   with_items:
   - wget
   - tar
@@ -20,15 +20,15 @@
 
 - shell: wget -nd -r -l1 --no-parent {{ mirrors[IM_NODE_NUM|int % mirrors|length] }} -A 'hadoop-1.?.?.tar.gz' && mv hadoop-1.?.?.tar.gz hadoop-1.X.tar.gz creates=/tmp/hadoop-1.X.tar.gz chdir=/tmp
 
-- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? $hadoop_home creates={{ hadoop_home }} chdir=/opt
+- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? {{ hadoop_home }} creates={{ hadoop_home }} chdir=/opt
 
 - file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 
 - lineinfile: dest="{{ hadoop_home }}/conf/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64"
-  when: debian_os
+  when: "ansible_os_family == 'Debian'"
 
 - lineinfile: dest="{{ hadoop_home }}/conf/hadoop-env.sh" regexp=JAVA_HOME= line="export JAVA_HOME=/usr/lib/jvm/jre-1.6.0"
-  when: redhat_os
+  when: "ansible_os_family == 'RedHat'"
 
 - template: src=mapred-site.xml dest="{{ hadoop_home }}/conf/mapred-site.xml" owner=root group=root
   notify:
