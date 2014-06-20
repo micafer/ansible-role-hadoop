@@ -1,21 +1,25 @@
 ---
 galaxy_info:
   author: "Miguel Caballer"
-  description: Ansible role to install a hadoop cluster
+  description: Ansible role to install a hadoop cluster (version 1.2.1)
   license: MIT
   min_ansible_version: 1.4
-  version: 0.3
+  version: 0.4
   categories:
     - clustering
   platforms:
   - name: EL
     versions:
-    - 5
     - 6
   - name: Ubuntu
     versions:
-    - all
+    - precise
+    - quantal
+    - raring
+    - saucy
+    - trusty
   - name: Debian
     versions:
-    - all
+    - squeeze
+    - wheezy
   dependencies: []
