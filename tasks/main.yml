@@ -18,9 +18,11 @@
   - gzip
   - openjdk-6-jre-headless
 
-- shell: wget -nd -r -l1 --no-parent {{ mirrors[IM_NODE_NUM|int % mirrors|length] }} -A 'hadoop-1.?.?.tar.gz' && mv hadoop-1.?.?.tar.gz hadoop-1.X.tar.gz creates=/tmp/hadoop-1.X.tar.gz chdir=/tmp
+- get_url: url={{ mirrors|random }}/hadoop-1.2.1.tar.gz dest=/tmp/hadoop-1.2.1.tar.gz
 
-- shell: tar xzf /tmp/hadoop-1.X.tar.gz && ln -s /opt/hadoop-1.?.? {{ hadoop_home }} creates={{ hadoop_home }} chdir=/opt
+- unarchive: src=/tmp/hadoop-1.2.1.tar.gz dest=/opt
+
+- file: dest={{ hadoop_home }} src=/opt/hadoop-1.2.1 state=link
 
 - file: dest=/opt/hadoop src={{ hadoop_home }} state=link
 

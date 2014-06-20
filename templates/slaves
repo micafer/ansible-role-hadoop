@@ -1,6 +1,6 @@
 {% for host in groups['all'] %}
-{% if hostvars[host]['IM_NODE_FQDN'] != IM_MASTER_FQDN %}
-{{ hostvars[host]['IM_NODE_FQDN'] }}
+{% if hostvars[host]['ansible_hostname'] != hadoop_master %}
+{{ hostvars[host]['ansible_hostname'] }}
 {% endif %}
 {% endfor %}
 
