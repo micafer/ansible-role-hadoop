@@ -1,7 +1,7 @@
 Hadoop ansible role
 =========================
 
-Installs and configure Hadoop system in a cluster of nodes.
+Installs and configure Hadoop system (version 1.2.1) in a cluster of nodes.
 How to use it:
 
 In the "Worker Nodes"
