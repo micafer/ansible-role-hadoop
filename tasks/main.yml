@@ -70,12 +70,15 @@
   - 50070
   - 50030
 
-- name: Open all ports from ip {{ item.1 }} in the firewall
-  command: iptables -I INPUT -p tcp -s {{ item.1 }}  -j ACCEPT
+- name: Open all ports for eth0 in the firewall
+  command: iptables -I INPUT -p tcp -s {{ hostvars[item]['ansible_eth0']['ipv4']['address'] }}  -j ACCEPT
   ignore_errors: yes
-  with_together:
-      - groups.all
-      - ansible_all_ipv4_addresses
+  with_items: groups.all
+
+- name: Open all ports for eth1 in the firewall
+  command: iptables -I INPUT -p tcp -s {{ hostvars[item]['ansible_eth1']['ipv4']['address'] }}  -j ACCEPT
+  ignore_errors: yes
+  with_items: groups.all
 
 - name: save iptables
   shell: iptables-save > /etc/sysconfig/iptables
