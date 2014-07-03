@@ -20,7 +20,9 @@
 
 - get_url: url={{ mirrors|random }}/hadoop-1.2.1.tar.gz dest=/tmp/hadoop-1.2.1.tar.gz
 
-- unarchive: src=/tmp/hadoop-1.2.1.tar.gz dest=/opt
+- command: tar xzf /tmp/hadoop-1.2.1.tar.gz chdir=/opt creates=/opt/hadoop-1.2.1
+# for some reasons this does not find the file
+#- unarchive: src=/tmp/hadoop-1.2.1.tar.gz dest=/opt
 
 - file: dest={{ hadoop_home }} src=/opt/hadoop-1.2.1 state=link
 
