@@ -1,25 +1,37 @@
 - name: restart hadoop-dfs
   action: shell {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf stop namenode; {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf start namenode
   when: "hadoop_type_of_node == 'master'"
+  async: 30
+  poll: 5
   
 - name: restart hadoop-mapred
   action: shell {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf stop jobtracker; {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf start jobtracker
   when: "hadoop_type_of_node == 'master'"
+  async: 30
+  poll: 5
   
 - name: restart hadoop-datanode
   action: shell {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf stop datanode; {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf start datanode
   when: "hadoop_type_of_node == 'slave'"
+  async: 30
+  poll: 5
   
 - name: restart hadoop-tasktracker
   action: shell {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf stop tasktracker; {{ hadoop_home }}/bin/hadoop-daemon.sh --config {{ hadoop_home }}/conf start tasktracker
   when: "hadoop_type_of_node == 'slave'"
+  async: 30
+  poll: 5
   
 - name: refreshDFSNodes
   command: "{{ hadoop_home }}/bin/hadoop dfsadmin -refreshNodes"
   when: "hadoop_type_of_node == 'master'"
   ignore_errors: yes
+  async: 30
+  poll: 5
 
 - name: refreshMRNodes
   command: "{{ hadoop_home }}/bin/hadoop mradmin -refreshNodes"
   when: "hadoop_type_of_node == 'master'"
   ignore_errors: yes
+  async: 30
+  poll: 5
