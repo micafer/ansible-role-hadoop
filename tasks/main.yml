@@ -57,6 +57,8 @@
 
 - template: src=slaves dest="{{ hadoop_home }}/conf/slaves" owner=root group=root
   notify:
+   - restart hadoop-dfs
+   - restart hadoop-mapred
    - refreshDFSNodes
    - refreshMRNodes
    - restart hadoop-datanode
