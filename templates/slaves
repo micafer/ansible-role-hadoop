@@ -1,5 +1,5 @@
 {% for host in groups['all'] %}
-{% if hostvars[host]['ansible_hostname'] != hadoop_master %}
+{% if 'ansible_hostname' in hostvars[host] and hostvars[host]['ansible_hostname'] != hadoop_master %}
 {{ hostvars[host]['ansible_hostname'] }}
 {% endif %}
 {% endfor %}
