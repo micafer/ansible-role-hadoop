@@ -77,13 +77,13 @@
 - name: Open all ports for eth0 in the firewall
   command: iptables -I INPUT -p tcp -s {{ hostvars[item]['ansible_eth0']['ipv4']['address'] }}  -j ACCEPT
   ignore_errors: yes
-  with_items: groups.all
+  with_items: "{{ groups.all }}"
   when: hostvars[item]['ansible_eth0'] is defined
 
 - name: Open all ports for eth1 in the firewall
   command: iptables -I INPUT -p tcp -s {{ hostvars[item]['ansible_eth1']['ipv4']['address'] }}  -j ACCEPT
   ignore_errors: yes
-  with_items: groups.all
+  with_items: "{{ groups.all }}"
   when: hostvars[item]['ansible_eth1'] is defined
 
 - name: save iptables
