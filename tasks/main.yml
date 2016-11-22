@@ -18,15 +18,13 @@
   - gzip
   - openjdk-6-jre-headless
 
-- get_url: url={{ mirrors|random }}/hadoop-1.2.1.tar.gz dest=/tmp/hadoop-1.2.1.tar.gz
+- get_url: url={{ mirrors|random }}/hadoop-1.2.1.tar.gz dest=/tmp/hadoop-1.2.1.tar.gz force=no
   register: result
   until: result|success
   retries: 5
   delay: 2
 
-- command: tar xzf /tmp/hadoop-1.2.1.tar.gz chdir=/opt creates=/opt/hadoop-1.2.1
-# for some reasons this does not find the file
-#- unarchive: src=/tmp/hadoop-1.2.1.tar.gz dest=/opt
+- unarchive: src=/tmp/hadoop-1.2.1.tar.gz dest=/opt creates=/opt/hadoop-1.2.1
 
 - file: dest={{ hadoop_home }} src=/opt/hadoop-1.2.1 state=link
 
